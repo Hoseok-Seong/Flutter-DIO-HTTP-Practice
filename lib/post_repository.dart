@@ -1,18 +1,19 @@
 
 import 'package:dio/dio.dart';
+import 'package:http_app/post.dart';
 
 class PostRepository {
   final dio = Dio();
   
-  Future<void> findById(int id) async{
+  Future<Post> findById(int id) async{
    Response response = await dio.get("https://jsonplaceholder.typicode.com/posts/$id");
-   Map<String, dynamic> responseMap = response.data;
-   print(responseMap["userId"]);
+   Post user = Post.fromJson(response.data);
+   return user;
   }
 
-  Future<void> findAll() async{
+  Future<List<Post>> findAll() async{
     Response response = await dio.get("https://jsonplaceholder.typicode.com/posts");
-    print(response.data);
+    List<dynamic> mapList = response.data;
+    return mapList.map((e) => Post.fromJson(e)).toList();
   }
-
 }
